@@ -122,6 +122,7 @@
             $schema = DB_NAME;
             $table = static::tableName();
 
+            /** @noinspection SqlNoDataSourceInspection */
             $query = <<<SQL
 SELECT 
     `COLUMN_NAME` AS `attribute`, `DATA_TYPE` AS `type`, `COLUMN_KEY` AS `columnKey` 
@@ -259,7 +260,7 @@ SQL;
          *
          * @throws Exception
          */
-        public function delete()
+        public function delete(): ActiveRecord
         {
             $idAttribute = static::idAttribute();
 
@@ -318,9 +319,9 @@ SQL;
          *
          * @return Query A query instance
          */
-        public static function query()
+        public static function query(): Query
         {
-            return new Query(['model' => get_called_class()]);
+            return new Query(['model' => static::class]);
         }
 
         /**
@@ -338,10 +339,10 @@ SQL;
                 ->insert($data)
                 ->execute();
 
-            $id = static::wpdb()->insert_id;
+            $id = (int)static::wpdb()->insert_id;
 
-            if ((int)$id > 0) {
-                return (int)$id;
+            if ($id > 0) {
+                return $id;
             }
 
             throw new Exception('The system could not save the record.');
@@ -360,7 +361,7 @@ SQL;
          * @see Query::update
          *
          */
-        public static function update($column = null, $value = null)
+        public static function update($column = null, $value = null): Query
         {
             $query = static::query()->update();
 
@@ -464,14 +465,18 @@ SQL;
          */
         protected static function doCasting(string $name, string $cast, $val)
         {
-            $cast = function_exists('mb_strtolower') ? mb_strtolower($cast) : strtolower($cast);
+            if (function_exists('mb_strtolower')) {
+                $cast = mb_strtolower($cast);
+            } else {
+                $cast = strtolower($cast);
+            }
 
             /** @var CastHelper $castingClass */
             $castingClass = static::$castingClass;
 
             if (is_subclass_of($castingClass, CastHelper::class)) {
                 if (array_key_exists($cast, $castingClass::$aliases)) {
-                    $cast = $castingClass::$aliases[$cast];
+                    $cast = (string)$castingClass::$aliases[$cast];
                 }
 
                 $methodName = "{$name}_{$cast}";
@@ -514,7 +519,7 @@ SQL;
             $results = array_values(
                 array_filter(
                     $query->get(),
-                    fn ($obj) => $obj instanceof ActiveRecord
+                    static fn ($obj) => $obj instanceof ActiveRecord
                 )
             );
 
@@ -533,16 +538,16 @@ SQL;
          *
          * @return static|null
          */
-        public static function findOne(int $id, ?string $attribute = null)
+        public static function findOne(int $id, ?string $attribute = null): ?ActiveRecord
         {
             try {
                 if (empty($attribute)) {
                     $attribute = static::idAttribute();
                 }
 
-                $result = static::query()->andWhere($attribute, (int)$id)->one();
+                $result = static::query()->andWhere($attribute, $id)->one();
 
-                if ($result instanceof ActiveRecord) {
+                if ($result instanceof static) {
                     return $result;
                 }
             } catch (Exception $exception) {}
@@ -567,7 +572,7 @@ SQL;
 
                 $result = static::query()->andWhere($attribute, $id)->one();
 
-                if ($result instanceof ActiveRecord) {
+                if ($result instanceof static) {
                     return $result;
                 }
             } catch (Exception $exception) {}
@@ -588,6 +593,8 @@ SQL;
         }
         /**
          * @inheritdoc
+         *
+         * @noinspection PhpMissingReturnTypeInspection
          */
         public function canGetProperty($name, $checkVars = true)
         {
@@ -600,6 +607,8 @@ SQL;
 
         /**
          * @inheritdoc
+         *
+         * @noinspection PhpMissingReturnTypeInspection
          */
         public function canSetProperty($name, $checkVars = true)
         {
@@ -619,10 +628,6 @@ SQL;
         {
             if (array_key_exists($name, $this->attributes)) {
                 if (!array_key_exists($name, $this->castedAttributes)) {
-                    if (!array_key_exists($name, $this->attributes)) {
-                        return null;
-                    }
-
                     $value = $this->attributes[$name];
 
                     $this->castedAttributes[$name] = static::castedValue($name, $value);
@@ -654,6 +659,8 @@ SQL;
 
         /**
          * @inheritdoc
+         *
+         * @noinspection PhpMissingReturnTypeInspection
          */
         public function __isset($name)
         {
