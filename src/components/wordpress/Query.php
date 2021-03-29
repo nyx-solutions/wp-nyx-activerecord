@@ -4,10 +4,10 @@
      * @noinspection PhpUnused
      */
 
-    namespace nox\components\wordpress;
+    namespace nyx\components\wordpress;
 
     use Exception;
-    use nox\base\Component;
+    use nyx\base\Component;
     use wpdb;
 
     /**

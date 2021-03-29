@@ -1,14 +1,14 @@
 <?php
 
-    namespace nox\components\wordpress;
+    namespace nyx\components\wordpress;
 
     use DateTime;
     use DateTimeZone;
     use Exception;
-    use nox\base\exceptions\InvalidCallException;
-    use nox\base\helpers\ArrayHelper;
-    use nox\base\Model;
-    use nox\components\wordpress\helpers\CastHelper;
+    use nyx\base\exceptions\InvalidCallException;
+    use nyx\base\helpers\ArrayHelper;
+    use nyx\base\Model;
+    use nyx\components\wordpress\helpers\CastHelper;
     use wpdb;
     use function mb_strtolower;
     use function strtolower;
@@ -16,7 +16,7 @@
     /**
      * Class ActiveRecord
      *
-     * @package nox\components\wordpress
+     * @package nyx\components\wordpress
      */
     abstract class ActiveRecord extends Model
     {

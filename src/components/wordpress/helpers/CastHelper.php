@@ -4,19 +4,19 @@
      * @noinspection PhpUnused
      */
 
-    namespace nox\components\wordpress\helpers;
+    namespace nyx\components\wordpress\helpers;
 
     use DateTime;
     use DateTimeZone;
     use Exception;
-    use nox\base\helpers\DateTimeHelper;
+    use nyx\base\helpers\DateTimeHelper;
     use function json_decode;
     use function json_encode;
 
     /**
      * Class Casting
      *
-     * @package nox\components\wordpress\helpers
+     * @package nyx\components\wordpress\helpers
      */
     class CastHelper
     {

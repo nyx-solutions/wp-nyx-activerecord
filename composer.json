@@ -1,11 +1,15 @@
 {
-  "name": "nox-it/wp-nox-activerecord",
-  "description": "NOX WordPress ActiveRecord",
+  "name": "nyx-solutions/wp-nyx-activerecord",
+  "description": "NYX WordPress ActiveRecord",
   "type": "library",
   "keywords": ["helpers", "php", "wordpress", "active-record"],
   "license": "BSD-3-Clause",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "authors": [
+    {
+      "name": "NYX Solutions",
+      "email": "nyx@jsas.com.br"
+    },
     {
       "name": "Jonatas Sas",
       "email": "atendimento@jsas.com.br"
@@ -15,14 +19,14 @@
   "require": {
     "php": ">=7.4.0",
 
-    "nox-it/php-nox-core": "~1.0.0",
-    "nox-it/php-nox-helpers": "~3.0.0"
+    "nyx-solutions/php-nyx-core": "~2.0.1",
+    "nyx-solutions/php-nyx-helpers": "~4.0.0"
   },
   "require-dev": {
   },
   "autoload": {
     "psr-4": {
-      "nox\\": "src/"
+      "nyx\\": "src/"
     }
   },
   "config": {
@@ -31,7 +35,7 @@
   "repositories": [
     {
       "type": "vcs",
-      "url": "https://github.com/nox-it/wp-nox-activerecord"
+      "url": "https://github.com/nyx-solutions/wp-nyx-activerecord"
     }
   ]
 }
